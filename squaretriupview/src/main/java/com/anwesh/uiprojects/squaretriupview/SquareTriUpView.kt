@@ -33,8 +33,16 @@ fun Float.mirrorValue(a : Int, b : Int) : Float {
 fun Float.updateValue(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * scGap * dir
 
 fun Canvas.drawSquareUp(j : Int, sc : Float, gap : Float, size : Float, paint : Paint) {
+    val scj : Float = sc.divideScale(j, squares)
+    var prevX : Float = 0f
+    var prevY : Float = 0f
+
+    if (scj > 0) {
+        prevX = gap * j
+        prevY = -gap * j
+    }
     save()
-    translate(gap * sc.divideScale(j, squares), -gap * sc * (1 - 2 * j))
+    translate(prevX + gap * scj, prevY - gap * scj * (1 - 2 * j))
     drawRect(RectF(-size, -size, size, size), paint)
     restore()
 }
@@ -56,7 +64,7 @@ fun Canvas.drawSTUNode(i : Int, scale : Float, paint : Paint) {
         translate(-size, 0f)
         drawRect(RectF(-squareSize, -squareSize, squareSize, squareSize), paint)
         for (k in 0..(squares - 1)) {
-            drawSquareUp(j, sc1, size, squareSize, paint)
+            drawSquareUp(k, sc1, size, squareSize, paint)
         }
         restore()
     }
