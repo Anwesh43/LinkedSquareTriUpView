@@ -195,4 +195,26 @@ class SquareTriUpView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : SquareTriUpView) {
+
+        private val animator : Animator = Animator(view)
+        private val sup : SquareTriUp = SquareTriUp(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            sup.draw(canvas, paint)
+            animator.animate {
+                sup.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            sup.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
